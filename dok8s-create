@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# added so that I can create a commit.
+
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
