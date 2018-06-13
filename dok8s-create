@@ -119,6 +119,8 @@ for i in $(seq "${NODE_COUNT}"); do
     nodes+=("${NODE_NAME}""$i")
 done
 
+echo "--> Debug1"
+
 # join the nodes to the cluster
 doctl compute droplet create "${nodes[@]}" \
     --region "${REGION}" \
@@ -132,12 +134,16 @@ doctl compute droplet create "${nodes[@]}" \
     --user-data-file "${TEMP_DIR}"/node.sh \
     --wait > /dev/null 2>&1
 
+echo "--> Debug2"
+
 echo "- Waiting nodes to be ready"
 # wait till nodes are ready
 until [ "$(kubectl get nodes 2> /dev/null | grep -v master | grep -c Ready | xargs)" == "${NODE_COUNT}" ]
 do
     sleep 10
 done
+
+echo "--> Debug3"
 
 kubectl create -f https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8%2B/auth-delegator.yaml > /dev/null 2>&1
 kubectl create -f https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8%2B/auth-reader.yaml > /dev/null 2>&1
@@ -146,13 +152,19 @@ kubectl create -f https://raw.githubusercontent.com/kubernetes-incubator/metrics
 kubectl create -f https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8%2B/metrics-server-service.yaml > /dev/null 2>&1
 kubectl create -f https://raw.githubusercontent.com/kubernetes-incubator/metrics-server/master/deploy/1.8%2B/resource-reader.yaml > /dev/null 2>&1
 
+echo "--> Debug4"
+
 kubectl create namespace monitoring > /dev/null 2>&1
 kubectl create -f https://raw.githubusercontent.com/bibinwilson/kubernetes-prometheus/master/clusterRole.yaml > /dev/null 2>&1
 kubectl create -n monitoring -f https://raw.githubusercontent.com/bibinwilson/kubernetes-prometheus/master/config-map.yaml > /dev/null 2>&1
 kubectl create -n monitoring -f https://raw.githubusercontent.com/bibinwilson/kubernetes-prometheus/master/prometheus-deployment.yaml > /dev/null 2>&1
 kubectl create -n monitoring -f https://raw.githubusercontent.com/bibinwilson/kubernetes-prometheus/master/prometheus-service.yaml > /dev/null 2>&1
 
+echo "--> Debug5"
+
 kubectl create -n monitoring -f https://raw.githubusercontent.com/caglar10ur/dok8s/master/manifests/node-exporter/node-exporter.yaml > /dev/null 2>&1
+
+echo "--> Debug6"
 
 # set dashboard access to admin
 cat <<EOF | kubectl create -f - > /dev/null 2>&1
