@@ -3,7 +3,7 @@
 # added so that I can create a commit.
 
 set -e
-set -x
+#set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -93,8 +93,6 @@ doctl compute droplet create "${MASTER_NAME}" \
     --enable-monitoring \
     --user-data-file "${TEMP_DIR}"/master.sh \
     --wait > /dev/null 2>&1
-
-echo "DEBUG1"
 
 # get the public/private ips of the master
 MASTER_ID=$(doctl compute droplet list | grep "${MASTER_NAME}" |cut -d' ' -f1)
