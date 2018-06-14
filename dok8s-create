@@ -136,7 +136,7 @@ doctl compute droplet create "${nodes[@]}" \
 
 echo "--> Debug2"
 
-echo "- Waiting nodes to be ready"
+echo "- Waiting for nodes to be ready"
 # wait till nodes are ready
 until [ "$(kubectl get nodes 2> /dev/null | grep -v master | grep -c Ready | xargs)" == "${NODE_COUNT}" ]
 do

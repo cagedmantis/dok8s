@@ -38,13 +38,10 @@ apt-get install -y docker-ce \
 systemctl enable docker
 systemctl start docker
 
-# set cloud controller to external
-sed -i 's|KUBELET_CADVISOR_ARGS=|KUBELET_CADVISOR_ARGS=--cloud-provider=external |g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-
-echo "Environment=\"KUBELET_EXTRA_ARGS=--node-ip=${PUBLIC_IP}\"" >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+# Specify node IP for kubelet. And set CCM
+echo "Environment=\"KUBELET_EXTRA_ARGS=--node-ip=${PUBLIC_IP} --cloud-provider=external\"" >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 systemctl daemon-reload
-
-service kubelet restart
+systemctl restart kubelet
 
 kubeadm join --node-name ${HOSTNAME} --token "$TOKEN" "$MASTER_IP":443 --discovery-token-unsafe-skip-ca-verification
