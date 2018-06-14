@@ -29,7 +29,6 @@ apt-get install -y docker-ce \
     kubeadm=${KUBERNETES_VERSION}-00 \
     kubernetes-cni=${KUBERNETES_CNI}-00
 
-
 HOSTNAME=$(curl -s http://169.254.169.254/metadata/v1/hostname)
 PUBLIC_IP=$(curl -s http://169.254.169.254/metadata/v1/interfaces/public/0/ipv4/address)
 PRIVATE_IP=$(curl -s http://169.254.169.254/metadata/v1/interfaces/private/0/ipv4/address)
@@ -37,9 +36,6 @@ PRIVATE_IP=$(curl -s http://169.254.169.254/metadata/v1/interfaces/private/0/ipv
 # Enable and start Docker.
 systemctl enable docker
 systemctl start docker
-
-# # set cloud controller to external
-# sed -i 's|KUBELET_CADVISOR_ARGS=|KUBELET_CADVISOR_ARGS=--cloud-provider=external |g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 # Specify node IP for kubelet.
 echo "Environment=\"KUBELET_EXTRA_ARGS=--node-ip=${PRIVATE_IP} --cloud-provider=external\"" >> /etc/systemd/system/kubelet.service.d/10-kubeadm.conf

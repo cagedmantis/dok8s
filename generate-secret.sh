@@ -36,12 +36,5 @@ EOF
 echo "Generated secret:"
 cat $GENERATED_SECRET
 
-# read -p "Create the following secret to your default kubectl context? [y/N]: " -r
-
-# if [[ ! $REPLY =~ ^[y]$ ]]
-# then
-# 	exit 0
-# fi
-
 echo "Creating Kubernetes Secret for DigitalOcean"
 kubectl apply -f $GENERATED_SECRET
